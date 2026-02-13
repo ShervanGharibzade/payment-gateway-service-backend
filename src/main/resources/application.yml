@@ -24,16 +24,14 @@ spring:
 server:
   port: 8080
 
----
-
-  callback:
-    security:
-      allowed-ips:
-        - 192.168.1.10
-        - 10.10.10.10
-        - 127.0.0.1
+callback:
+  security:
+    allowed-ips:
+      - 192.168.1.10
+      - 10.10.10.10
+      - 127.0.0.1
 
     secrets:
       ZARINPAL: zarinpal-secret-key
-      PAYIR: payir-secret-key
-      MELLAT: mellat-secret-key
+      IDPAY: idpay-secret-key
+      PAYPING: payping-secret-key
