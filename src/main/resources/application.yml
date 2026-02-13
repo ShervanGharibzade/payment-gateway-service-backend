@@ -1,0 +1,15 @@
+
+callback:
+security:
+allowed-ips:
+- 192.168.1.10
+- 10.10.10.10
+
+secrets:
+ZARINPAL: zarinpal-secret-key
+PAYIR: payir-secret-key
+MELLAT: mellat-secret-key
+
+spring:
+  application:
+    name: PGS
