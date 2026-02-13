@@ -1,15 +1,39 @@
-
-callback:
-security:
-allowed-ips:
-- 192.168.1.10
-- 10.10.10.10
-
-secrets:
-ZARINPAL: zarinpal-secret-key
-PAYIR: payir-secret-key
-MELLAT: mellat-secret-key
-
 spring:
   application:
     name: PGS
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pgs_db
+    username: pgs_user
+    password: pgs_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+---
+
+  callback:
+    security:
+      allowed-ips:
+        - 192.168.1.10
+        - 10.10.10.10
+        - 127.0.0.1
+
+    secrets:
+      ZARINPAL: zarinpal-secret-key
+      PAYIR: payir-secret-key
+      MELLAT: mellat-secret-key
