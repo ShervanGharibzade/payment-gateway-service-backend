@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @Table(
         name = "callback_audit_logs",
         indexes = {
-                @Index(name = "idx_callback_ref", columnList = "referenceNumber"),
-                @Index(name = "idx_callback_gateway", columnList = "gateway"),
-                @Index(name = "idx_callback_received_at", columnList = "receivedAt")
+                @Index(name = "idx_callback_ref",        columnList = "reference_number"),  // ← fixed: DB column name
+                @Index(name = "idx_callback_gateway",    columnList = "gateway"),
+                @Index(name = "idx_callback_received_at", columnList = "received_at")       // ← fixed: DB column name
         }
 )
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public class CallbackAuditLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "reference_number", nullable = false)
     private String referenceNumber;
 
     @Enumerated(EnumType.STRING)
@@ -42,17 +42,16 @@ public class CallbackAuditLog {
     @Column(nullable = false)
     private PaymentStatus status;
 
-    @Column(nullable = false, length = 2000)
+    @Column(name = "raw_payload", nullable = false, length = 2000)
     private String rawPayload;
 
     @Column(nullable = false, length = 512)
     private String signature;
 
-    @Column(nullable = false)
+    @Column(name = "client_ip", nullable = false)
     private String clientIp;
 
     @CreationTimestamp
+    @Column(name = "received_at")
     private LocalDateTime receivedAt;
-
-
 }

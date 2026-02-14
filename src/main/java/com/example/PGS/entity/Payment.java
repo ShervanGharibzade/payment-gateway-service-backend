@@ -16,12 +16,11 @@ import java.time.LocalDateTime;
 @Table(name = "payments",
         indexes = {
                 @Index(name = "idx_payments_reference_number", columnList = "reference_number"),
-                @Index(name = "idx_payments_merchant_id", columnList = "merchant_id"),
-                @Index(name = "idx_payments_status", columnList = "status"),
-                @Index(name = "idx_payments_gateway", columnList = "gateway"),
-                @Index(name = "idx_payments_created_at", columnList = "created_at")
-
-})
+                @Index(name = "idx_payments_merchant_id",      columnList = "merchant_id"),
+                @Index(name = "idx_payments_status",           columnList = "status"),
+                @Index(name = "idx_payments_gateway",          columnList = "gateway"),
+                @Index(name = "idx_payments_created_at",       columnList = "created_at")
+        })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -34,8 +33,8 @@ public class Payment {
     private Long id;
 
     @NotNull(message = "Merchant is required")
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "merchant_id",nullable = false,foreignKey = @ForeignKey(name = "fk_payment_merchant"))
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "merchant_id", nullable = false, foreignKey = @ForeignKey(name = "fk_payment_merchant"))
     private Merchant merchant;
 
     @Column(nullable = false, precision = 18, scale = 2)
@@ -83,21 +82,23 @@ public class Payment {
     private String failureReason;
 
     @CreationTimestamp
-    @Column(nullable = false,name = "created_at", updatable = false)
+    @Column(nullable = false, name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at",nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public void markAsPaid(String trackingNumber) {
         this.status = PaymentStatus.SUCCESS;
         this.trackingNumber = trackingNumber;
         this.paidAt = LocalDateTime.now();
+        this.callbackReceivedAt = LocalDateTime.now();
     }
 
     public void markAsFailed(String reason) {
         this.status = PaymentStatus.FAILED;
         this.failureReason = reason;
+        this.callbackReceivedAt = LocalDateTime.now();
     }
 }

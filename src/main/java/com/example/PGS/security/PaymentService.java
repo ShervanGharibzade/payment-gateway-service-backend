@@ -22,23 +22,24 @@ public class PaymentService {
     private final MerchantRepository merchantRepository;
 
     @Transactional
-    public Payment createPayment(CreatePaymentRequest req) {
+    public Payment createPayment(String apiKey, CreatePaymentRequest req) {
+
+        Merchant merchant = merchantRepository.findByApiKey(apiKey)
+                .orElseThrow(() ->
+                        new MerchantNotFoundException(
+                                "Merchant not found for the provided API key"
+                        )
+                );
 
         if (paymentRepository.existsByReferenceNumber(req.getReferenceNumber())) {
             throw new DuplicatePaymentException();
         }
 
-        Merchant merchant = merchantRepository.findById(req.getMerchantId())
-                .orElseThrow(() ->
-                        new MerchantNotFoundException(
-                                "Merchant not found with ID: " + req.getMerchantId()
-                        )
-                );
-
         Payment payment = Payment.builder()
                 .merchant(merchant)
                 .amount(req.getAmount())
                 .referenceNumber(req.getReferenceNumber())
+                .description(req.getDescription())
                 .gateway(req.getGateway())
                 .status(PaymentStatus.PENDING)
                 .build();
@@ -55,7 +56,6 @@ public class PaymentService {
                         req.getGateway()
                 )
                 .orElseThrow(PaymentNotFoundException::new);
-
 
         if (payment.getStatus().isFinal()) {
             return;

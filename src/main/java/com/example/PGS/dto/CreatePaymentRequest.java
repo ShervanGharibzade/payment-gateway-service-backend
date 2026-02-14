@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CreatePaymentRequest {
-    @NotNull
-    private Long merchantId;
+
 
     @NotNull
     @Digits(integer = 16, fraction = 2)
